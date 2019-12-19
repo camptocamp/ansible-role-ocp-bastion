@@ -1,0 +1,55 @@
+---
+- name: Create landing directory for environment
+  file:
+    path: "{{ environment_path }}/{{ item }}"
+    state: directory
+    recurse: yes
+  with_items:
+    - "{{ environment_name }}"
+    - ".sources"
+    - "{{ environment_name }}/.ssh"
+
+- name: Download installer
+  get_url:
+    url: "{{ ocp_installer_url }}"
+    dest: "{{ environment_path }}/.sources/openshift-installer-{{ ocp_version }}.tar.gz"
+  notify: deploy_installer
+
+- name: Download client
+  get_url:
+    url: "{{ ocp_client_url }}"
+    dest: "{{ environment_path }}/.sources/openshift-client-{{ ocp_version }}.tar.gz"
+  notify: deploy_client
+
+- name: Install httpd
+  yum:
+    name: httpd
+    state: present
+  notify: start_and_enable_httpd
+
+- name: Configure firewallD for http
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+
+- name: Create environment directory in httpd
+  file:
+    path: "/var/www/html/{{ environment_name }}"
+    state: directory
+    
+- name: Generate SSH Key
+  openssh_keypair:  
+    path: "{{ environment_path }}/{{ environment_name }}/.ssh/openshift"
+    size: 4096
+    type: rsa
+
+- name: Slurp openshift SSH public key
+  slurp:
+    src: "{{ environment_path }}/{{ environment_name }}/.ssh/openshift.pub"
+  register: public_ssh_key
+
+- name: register ssh public key
+  set_fact:
+    ocp_ssh_key: "{{ public_ssh_key.content | b64decode }}"
+

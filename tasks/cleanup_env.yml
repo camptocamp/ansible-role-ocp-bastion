@@ -1,0 +1,16 @@
+---
+- name: List files to delete
+  find:
+    path: "{{ environment_path }}/{{ environment_name }}"
+    patterns: "*.*,.openshift*,auth"
+    exclude: .ssh
+    file_type: any
+    hidden: yes
+  register: files_to_delete
+- debug:
+    var: files_to_delete.files
+- name: Delete file
+  file:
+    path: "{{ item.path }}"
+    state: absent
+  with_items: "{{ files_to_delete.files }}"

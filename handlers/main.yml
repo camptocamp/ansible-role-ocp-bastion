@@ -1,0 +1,21 @@
+---
+- name: deploy_installer
+  unarchive:
+    src: "{{ environment_path }}/.sources/openshift-installer-{{ ocp_version }}.tar.gz"
+    dest: /usr/local/bin
+    remote_src: true
+- name: deploy_client
+  unarchive:
+    src: "{{ environment_path }}/.sources/openshift-client-{{ ocp_version }}.tar.gz"
+    dest: /usr/local/bin
+    remote_src: true
+- name: Add key to agent
+  shell: |
+    eval "$(ssh-agent)"
+    ssh-add {{ environment_path }}/{{ environment_name }}/.ssh/openshift
+  listen: add_ssh_to_agent
+- name: start_and_enable_httpd
+  service:
+    name: httpd
+    enabled: yes
+    state: started
