@@ -18,4 +18,13 @@ platform:
     datacenter: "{{ ocp_vcenter_datacenter }}"
     defaultDatastore: "{{ ocp_vcenter_datastore }}"
 pullSecret: '{{ ocp_pull_secret }}' 
-sshKey: '{{ ocp_ssh_key }}' 
+sshKey: '{{ ocp_ssh_key }}'
+{% if ocp_registry_mirror is defined %}
+imageContentSources:
+- mirrors:
+  - {{ ocp_registry_mirror }}
+  source: quay.io/openshift-release-dev/ocp-release
+- mirrors:
+  - {{ ocp_registry_mirror }}
+  source: quay.io/openshift-release-dev/ocp-v4.0-art-dev
+{% endif %}

@@ -14,12 +14,14 @@
     url: "{{ ocp_installer_url }}"
     dest: "{{ environment_path }}/.sources/openshift-installer-{{ ocp_version }}.tar.gz"
   notify: deploy_installer
+  tags: installer
 
 - name: Download client
   get_url:
     url: "{{ ocp_client_url }}"
     dest: "{{ environment_path }}/.sources/openshift-client-{{ ocp_version }}.tar.gz"
   notify: deploy_client
+  tags: client
 
 - name: Install httpd
   yum:

@@ -3,7 +3,7 @@
     "config": {
       "append": [
         {
-          "source": "http://{{ inventory_hostname }}/{{ environment_name }}/bootstrap.ign",
+          "source": "http://{{ ocp_bastion_hostname | default(inventory_hostname) }}/{{ environment_name }}/bootstrap.ign",
           "verification": {}
         }
       ]
