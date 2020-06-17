@@ -38,3 +38,13 @@ proxy:
 additionalTrustBundle: |
 {{ ocp_additional_trust_bundle | indent( indentfirst=True)}}
 {% endif %}
+{% if cluster_cidr is defined or service_cidr is defined %}
+networking:
+  clusterNetwork:
+  - cidr: {{ cluster_cidr | default('10.128.0.0/14') }}
+    hostPrefix: 23
+  machineCIDR: 10.0.0.0/16
+  networkType: OpenShiftSDN
+  serviceNetwork:
+  - {{ service_cidr | default('172.30.0.0/16') }}
+{% endif %}
