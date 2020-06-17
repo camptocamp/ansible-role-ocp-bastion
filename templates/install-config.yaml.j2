@@ -32,7 +32,7 @@ imageContentSources:
 proxy:
   httpProxy: {{ ocp_proxy_host }} 
   httpsProxy: {{ ocp_proxy_host }}
-  noProxy: {{ ocp_proxy_no_proxy }} 
+  noProxy: '{{ ocp_proxy_no_proxy }}' 
 {% endif %}
 {% if ocp_additional_trust_bundle is defined %}
 additionalTrustBundle: |
