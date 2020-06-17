@@ -10,11 +10,15 @@
 
 - name: Prepare config files
   block:
+  - name: fact ca
+    set_fact:
+      ocp_additional_trust_bundle: "{{ lookup('file', ocp_additional_trust_bundle_path) }}"
+
   - name: Generate install-config.yaml
     template:
       src: install-config.yaml.j2
       dest: "{{ environment_path }}/{{ environment_name }}/install-config.yaml"
-
+   
   - name: Generate manifests
     shell: /usr/local/bin/openshift-install create manifests --dir={{ environment_path }}/{{ environment_name }}
 
