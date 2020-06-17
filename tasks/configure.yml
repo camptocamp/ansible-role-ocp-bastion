@@ -21,26 +21,30 @@
    
   - name: Generate manifests
     shell: /usr/local/bin/openshift-install create manifests --dir={{ environment_path }}/{{ environment_name }}
+    tags: ignition
 
   - name: Update master schedulability
     lineinfile:
       path: "{{ environment_path }}/{{ environment_name }}/manifests/cluster-scheduler-02-config.yml"
       regexp: '^\s*mastersSchedulable: true$'
       line: "  mastersSchedulable: false"
+    tags: ignition
 
   - name: Generate ignition files
     shell: /usr/local/bin/openshift-install create ignition-configs --dir={{ environment_path }}/{{ environment_name }}
-
+    tags: ignition
   - name: Copy bootstrap.ign to httpd directory
     copy:
       src: "{{ environment_path }}/{{ environment_name }}/bootstrap.ign"
       dest: "/var/www/html/{{ environment_name }}/bootstrap.ign"
-      remote_src: yes 
+      remote_src: yes
+    tags: ignition
 
   - name: Generate the append-bootstrap.ign
     template:
       src: append-bootstrap.ign.j2
       dest: "{{ environment_path }}/{{ environment_name }}/append-bootstrap.ign"
+    tags: ignition
 
   - name: Generate b64 files
     shell: base64 -w0 {{ environment_path }}/{{ environment_name }}/{{ item }}.ign > {{ environment_path }}/{{ environment_name }}/{{ item }}.64
@@ -48,4 +52,5 @@
       - master
       - worker
       - append-bootstrap
+    tags: ignition
   when: stat_master.stat.exists != true
