@@ -22,24 +22,33 @@
     dest: "{{ environment_path }}/.sources/openshift-client-{{ ocp_version }}.tar.gz"
   notify: deploy_client
   tags: client
+- name: Deploy installer
+  unarchive:
+    src: "{{ environment_path }}/.sources/openshift-installer-{{ ocp_version }}.tar.gz"
+    dest: /usr/local/bin
+  become: true
+
 
 - name: Install httpd
   yum:
     name: httpd
     state: present
   notify: start_and_enable_httpd
+  tags: httpd
 
 - name: Configure firewallD for http
   firewalld:
     service: http
     permanent: yes
     state: enabled
+  tags: httpd
 
 - name: Create environment directory in httpd
   file:
     path: "/var/www/html/{{ environment_name }}"
     state: directory
-    
+  tags: httpd
+
 - name: Generate SSH Key
   openssh_keypair:  
     path: "{{ environment_path }}/{{ environment_name }}/.ssh/openshift"
