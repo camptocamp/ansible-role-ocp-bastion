@@ -1,2 +1,37 @@
-localhost
+[ocp:vars]
+environment_path = "~/git/ocp-dev"
+environment_name = "lab"
 
+ocp_reinstall = "false"
+
+ocp_version = "4.2.16"
+ocp_installer_url = "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.2/openshift-install-linux-{{ ocp_version }}.tar.gz"
+ocp_client_url = "https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest-4.2/openshift-client-linux-{{ ocp_version }}.tar.gz"
+
+ocp_domain = domain.com
+ocp_cluster_name = lab
+ocp_vcenter_hostname = vc.domain.com
+ocp_vcenter_username = "sa"
+ocp_vcenter_password = "password" #Use vault!
+ocp_vcenter_datacenter = "MyDC"
+ocp_vcenter_datastore = 'dc'
+ocp_pull_secret = ''
+ocp_bastion_hostname = "bastion.domain.com"
+#ocp_registry_mirror = "bastion.domain.com"
+
+vcenter_provision_hostname="{{ ocp_vcenter_hostname }}"
+vcenter_provision_username="sa"
+vcenter_provision_password="{{ ocp_vcenter_password }}"
+vcenter_provision_datacenter="{{ ocp_vcenter_datacenter }}"
+vcenter_provision_cluster="lab"
+vcenter_provision_folder="{{ ocp_cluster_name }}"
+vcenter_provision_network_name="OCP-LAB"
+vcenter_provision_datastore="ds"
+
+vcenter_provision_default_rhcos_template="rhcos-4.3.2"
+
+[ocp:children]
+bastion
+
+[bastion]
+localhost
