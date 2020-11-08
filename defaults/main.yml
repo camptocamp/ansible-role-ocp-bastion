@@ -7,4 +7,4 @@ ocp_installer_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/lat
 ocp_client_url: https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux-{{ ocp_version }}.tar.gz
 
 ocp_reinstall: false
-
+ocp_fips_enabled: false

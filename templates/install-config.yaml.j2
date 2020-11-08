@@ -1,15 +1,15 @@
 apiVersion: v1
-baseDomain: "{{ ocp_domain }}" 
+baseDomain: "{{ ocp_domain }}"
 compute:
-- hyperthreading: Enabled   
+- hyperthreading: Enabled
   name: worker
-  replicas: 0 
+  replicas: 0
 controlPlane:
-  hyperthreading: Enabled   
+  hyperthreading: Enabled
   name: master
-  replicas: 3 
+  replicas: 3
 metadata:
-  name: "{{ ocp_cluster_name }}" 
+  name: "{{ ocp_cluster_name }}"
 platform:
   vsphere:
     vcenter: "{{ ocp_vcenter_hostname }}"
@@ -17,8 +17,9 @@ platform:
     password: "{{ ocp_vcenter_password }}"
     datacenter: "{{ ocp_vcenter_datacenter }}"
     defaultDatastore: "{{ ocp_vcenter_datastore }}"
-pullSecret: '{{ ocp_pull_secret }}' 
+pullSecret: '{{ ocp_pull_secret }}'
 sshKey: '{{ ocp_ssh_key }}'
+fips: '{{ ocp_fips_enabled | default(false) }}'
 {% if ocp_registry_mirror is defined %}
 imageContentSources:
 - mirrors:
@@ -30,9 +31,9 @@ imageContentSources:
 {% endif %}
 {% if ocp_proxy_host is defined %}
 proxy:
-  httpProxy: {{ ocp_proxy_host }} 
+  httpProxy: {{ ocp_proxy_host }}
   httpsProxy: {{ ocp_proxy_host }}
-  noProxy: '{{ ocp_proxy_no_proxy }}' 
+  noProxy: '{{ ocp_proxy_no_proxy }}'
 {% endif %}
 {% if ocp_additional_trust_bundle is defined %}
 additionalTrustBundle: |

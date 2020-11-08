@@ -2,7 +2,7 @@
 - name: CleanUp environment configuration
   include_tasks: cleanup_env.yml
   when: ocp_reinstall
-  
+
 - name: Check if already set up
   stat:
     path: "{{ environment_path }}/{{ environment_name }}/master.ign"
@@ -18,7 +18,7 @@
     template:
       src: install-config.yaml.j2
       dest: "{{ environment_path }}/{{ environment_name }}/install-config.yaml"
-   
+
   - name: Generate manifests
     shell: /usr/local/bin/openshift-install create manifests --dir={{ environment_path }}/{{ environment_name }}
     tags: ignition
