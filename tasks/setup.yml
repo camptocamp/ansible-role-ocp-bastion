@@ -26,6 +26,7 @@
   unarchive:
     src: "{{ environment_path }}/.sources/openshift-installer-{{ ocp_version }}.tar.gz"
     dest: /usr/local/bin
+    remote_src: true
   become: true
 
 
@@ -50,7 +51,7 @@
   tags: httpd
 
 - name: Generate SSH Key
-  openssh_keypair:  
+  openssh_keypair:
     path: "{{ environment_path }}/{{ environment_name }}/.ssh/openshift"
     size: 4096
     type: rsa
