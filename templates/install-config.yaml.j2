@@ -19,7 +19,6 @@ platform:
     defaultDatastore: "{{ ocp_vcenter_datastore }}"
 pullSecret: '{{ ocp_pull_secret }}'
 sshKey: '{{ ocp_ssh_key }}'
-fips: '{{ ocp_fips_enabled | default(false) }}'
 {% if ocp_registry_mirror is defined %}
 imageContentSources:
 - mirrors:

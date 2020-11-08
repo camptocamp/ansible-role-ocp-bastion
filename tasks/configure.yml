@@ -13,7 +13,7 @@
   - name: fact ca
     set_fact:
       ocp_additional_trust_bundle: "{{ lookup('file', ocp_additional_trust_bundle_path) | default(omit) }}"
-
+    when: ocp_additional_trust_bundle_path is defined
   - name: Generate install-config.yaml
     template:
       src: install-config.yaml.j2
